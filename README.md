@@ -38,7 +38,7 @@ To deploy WordPress, MySQL, and phpMyAdmin together with data persistence, you u
 * Security: The MySQL database does not expose any ports to your host machine. It can only be reached by WordPress and phpMyAdmin inside the secure wp_network.
 
 ## How to Run It And Implement Docker Secrets 
-1.First, create a folder to house your sensitive parameters locally on your host machine. 
+1. First, create a folder to house your sensitive parameters locally on your host machine. 
 Run these commands in your project root terminal to save the secrets as plain-text files:
 ```
 mkdir -p ./secrets
