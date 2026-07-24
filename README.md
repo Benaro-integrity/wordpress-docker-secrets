@@ -29,15 +29,15 @@ Beyond the containers themselves, your container engine (like Docker Compose) mu
 * Isolated Network: A private bridge network that connects your containers. This allows WordPress to securely talk to the database while keeping the database hidden from the public internet. Only the web server/proxy should expose public ports (80 and 443).
 
 ## To Run or Deploy Containers
-To deploy WordPress, MySQL, and phpMyAdmin together with data persistence, you use a Docker Compose file (**docker-compose.yml**) to orchestrate these three official images and link them together.
+To deploy WordPress, MySQL, and phpMyAdmin together with data persistence, you use a Docker Compose file (**compose.yml**) to orchestrate these three official images and link them together.
 
-# How This Setup Works
+## How This Setup Works
 * Data Persistence: The volumes section at the bottom creates two managed Docker volumes (db_data and wp_data). Even if you stop, delete, or update your containers, your database entries and uploaded media will remain safe.
   - Access Ports:Visit http://localhost:8080 to view your WordPress site.
   - Visit http://localhost:8081 to log into phpMyAdmin (use root and your root password to log in).
 * Security: The MySQL database does not expose any ports to your host machine. It can only be reached by WordPress and phpMyAdmin inside the secure wp_network.
 
-# How to Run It And Implement Docker Secrets 
+## How to Run It And Implement Docker Secrets 
 1.First, create a folder to house your sensitive parameters locally on your host machine. 
 Run these commands in your project root terminal to save the secrets as plain-text files:
 ```
