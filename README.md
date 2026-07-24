@@ -1,4 +1,4 @@
-# Dockerize A Wordpress Site
+# WordPress Docker Setup with Secrets Management
 To deploy a WordPress site in a container, you need a minimum of two core containers (the WordPress application and a database), but a production-ready stack typically requires four services to handle traffic and security safely.
 
 ## Core Services (Mandatory)
