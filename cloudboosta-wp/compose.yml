@@ -1,0 +1,79 @@
+# version attribute is now considered obselute in docker compose v2
+services:
+  # Database Service
+  db:
+    image: mysql:8.0
+    container_name: cba_wp_mysql_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: cloudboosta_wp_db
+      MYSQL_USER: cba_wp_user
+      # MySQL to read from secrets
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wp_network
+    secrets:
+      - db_root_password
+      - db_password
+
+  # WordPress Service
+  wordpress:
+    image: wordpress:latest
+    container_name: wp_apache_app
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: cloudboosta_wp_db
+      WORDPRESS_DB_USER: cba_wp_user
+      # WordPress to read from secrets
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - wp_network
+    secrets:
+      - db_password
+
+  # phpMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: wp_phpmyadmin
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 64M
+      # phpMyAdmin to read from secrets
+      PMA_PASSWORD_FILE: /run/secrets/db_password
+    networks:
+      - wp_network
+    secrets:
+      - db_password
+
+# Persistent Volumes
+volumes:
+  wp_data:
+  db_data:
+
+# Isolated Network
+networks:
+  wp_network:
+    driver: bridge
+
+# Secrets Declaration
+secrets:
+  db_root_password:
+    file: ./secrets/db_root_password.txt
+  db_password:
+    file: ./secrets/db_password.txt
